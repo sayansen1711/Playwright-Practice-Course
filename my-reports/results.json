@@ -1,0 +1,437 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "C:\\Users\\Sayan\\OneDrive\\Documents\\Playwright Demo\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "tests/tricentispageTest.spec.ts"
+    ],
+    "configFile": "C:\\Users\\Sayan\\OneDrive\\Documents\\Playwright Demo\\playwright.config.ts",
+    "rootDir": "C:/Users/Sayan/OneDrive/Documents/Playwright Demo/tests",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": true,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 4
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Users/Sayan/OneDrive/Documents/Playwright Demo/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 4
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "C:/Users/Sayan/OneDrive/Documents/Playwright Demo/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "html",
+        {
+          "open": "always",
+          "outputFolder": "my-reports"
+        }
+      ],
+      [
+        "json",
+        {
+          "outputFile": "my-reports/results.json"
+        }
+      ],
+      [
+        "junit",
+        {
+          "outputFile": "my-reports/results.xml"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.61.1",
+    "workers": 4,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "tricentispageTest.spec.ts",
+      "file": "tricentispageTest.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "demowebshop Home Page Tests",
+          "file": "tricentispageTest.spec.ts",
+          "line": 3,
+          "column": 6,
+          "specs": [
+            {
+              "title": "Homepage logo test",
+              "ok": true,
+              "tags": [
+                "P2",
+                "Regression"
+              ],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 9706,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-08-25T19:34:40.898Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "6c8bcedddc55156d6412-0c79927c158e366cc686",
+              "file": "tricentispageTest.spec.ts",
+              "line": 5,
+              "column": 5
+            },
+            {
+              "title": "Homepage title test",
+              "ok": true,
+              "tags": [
+                "P2",
+                "Regression"
+              ],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 9994,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-08-25T19:34:41.012Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "6c8bcedddc55156d6412-42877d5630be99f6d5e0",
+              "file": "tricentispageTest.spec.ts",
+              "line": 10,
+              "column": 5
+            }
+          ]
+        },
+        {
+          "title": "demowebshop User Login test",
+          "file": "tricentispageTest.spec.ts",
+          "line": 16,
+          "column": 6,
+          "specs": [
+            {
+              "title": "Login test with in-valid credentials",
+              "ok": true,
+              "tags": [
+                "P1",
+                "Sanity"
+              ],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 8674,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "This test is expected to fail due to invalid credentials\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "steps": [
+                        {
+                          "title": "Open Login Page",
+                          "duration": 5326
+                        },
+                        {
+                          "title": "Enter login credentials",
+                          "duration": 384
+                        },
+                        {
+                          "title": "Click login button",
+                          "duration": 1289
+                        },
+                        {
+                          "title": "Verify unsuccessful login",
+                          "duration": 67
+                        }
+                      ],
+                      "startTime": "2026-08-25T19:34:40.934Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "6c8bcedddc55156d6412-10c807d4cac69b259044",
+              "file": "tricentispageTest.spec.ts",
+              "line": 18,
+              "column": 5
+            },
+            {
+              "title": "Login test with valid credentials",
+              "ok": true,
+              "tags": [
+                "P1",
+                "Sanity"
+              ],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 10150,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "steps": [
+                        {
+                          "title": "Open Login Page",
+                          "duration": 5319
+                        },
+                        {
+                          "title": "Enter login credentials",
+                          "duration": 560
+                        },
+                        {
+                          "title": "Click login button",
+                          "duration": 1622
+                        },
+                        {
+                          "title": "Verify unsuccessful login",
+                          "duration": 325
+                        }
+                      ],
+                      "startTime": "2026-08-25T19:34:40.880Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "6c8bcedddc55156d6412-31faf86c9cda374ed02e",
+              "file": "tricentispageTest.spec.ts",
+              "line": 36,
+              "column": 5
+            },
+            {
+              "title": "demowebshop search test",
+              "ok": true,
+              "tags": [
+                "P2",
+                "Regression"
+              ],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "location": {
+                        "file": "C:\\Users\\Sayan\\OneDrive\\Documents\\Playwright Demo\\tests\\tricentispageTest.spec.ts",
+                        "line": 53,
+                        "column": 10
+                      }
+                    }
+                  ],
+                  "expectedStatus": "skipped",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": -1,
+                      "parallelIndex": -1,
+                      "status": "skipped",
+                      "duration": 0,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-08-25T19:34:50.979Z",
+                      "annotations": [
+                        {
+                          "type": "skip",
+                          "location": {
+                            "file": "C:\\Users\\Sayan\\OneDrive\\Documents\\Playwright Demo\\tests\\tricentispageTest.spec.ts",
+                            "line": 53,
+                            "column": 10
+                          }
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "skipped"
+                }
+              ],
+              "id": "6c8bcedddc55156d6412-1d728078024d0acbbb99",
+              "file": "tricentispageTest.spec.ts",
+              "line": 53,
+              "column": 10
+            },
+            {
+              "title": "demoblaze Login test",
+              "ok": false,
+              "tags": [
+                "P1",
+                "Sanity"
+              ],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "failed",
+                      "duration": 13386,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#logout2')\nExpected: visible\nReceived: hidden\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('#logout2')\u001b[22m\n\u001b[2m    23 × locator resolved to <a href=\"#\" id=\"logout2\" class=\"nav-link\" onclick=\"logOut()\">Log out</a>\u001b[22m\n\u001b[2m       - unexpected value \"hidden\"\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#logout2')\nExpected: visible\nReceived: hidden\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('#logout2')\u001b[22m\n\u001b[2m    23 × locator resolved to <a href=\"#\" id=\"logout2\" class=\"nav-link\" onclick=\"logOut()\">Log out</a>\u001b[22m\n\u001b[2m       - unexpected value \"hidden\"\u001b[22m\n\n    at C:\\Users\\Sayan\\OneDrive\\Documents\\Playwright Demo\\tests\\tricentispageTest.spec.ts:66:48",
+                        "location": {
+                          "file": "C:\\Users\\Sayan\\OneDrive\\Documents\\Playwright Demo\\tests\\tricentispageTest.spec.ts",
+                          "column": 48,
+                          "line": 66
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 64 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mfill(\u001b[32m'#loginpassword'\u001b[39m\u001b[33m,\u001b[39m\u001b[32m'test@123X'\u001b[39m)\u001b[33m;\u001b[39m \u001b[90m//invalid credentials\u001b[39m\n \u001b[90m 65 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'button'\u001b[39m\u001b[33m,\u001b[39m {name\u001b[33m:\u001b[39m\u001b[32m'Log in'\u001b[39m})\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 66 |\u001b[39m         \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mlocator(\u001b[32m'#logout2'\u001b[39m))\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 67 |\u001b[39m         \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mlocator(\u001b[32m'#nameofuser'\u001b[39m))\u001b[33m.\u001b[39mtoContainText(\u001b[32m'Welcome pavanol'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 68 |\u001b[39m         \u001b[90m// user_Demo_12345 user_Demo_1234\u001b[39m\n \u001b[90m 69 |\u001b[39m     })\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Users\\Sayan\\OneDrive\\Documents\\Playwright Demo\\tests\\tricentispageTest.spec.ts",
+                            "column": 48,
+                            "line": 66
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#logout2')\nExpected: visible\nReceived: hidden\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('#logout2')\u001b[22m\n\u001b[2m    23 × locator resolved to <a href=\"#\" id=\"logout2\" class=\"nav-link\" onclick=\"logOut()\">Log out</a>\u001b[22m\n\u001b[2m       - unexpected value \"hidden\"\u001b[22m\n\n\n\u001b[0m \u001b[90m 64 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mfill(\u001b[32m'#loginpassword'\u001b[39m\u001b[33m,\u001b[39m\u001b[32m'test@123X'\u001b[39m)\u001b[33m;\u001b[39m \u001b[90m//invalid credentials\u001b[39m\n \u001b[90m 65 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgetByRole(\u001b[32m'button'\u001b[39m\u001b[33m,\u001b[39m {name\u001b[33m:\u001b[39m\u001b[32m'Log in'\u001b[39m})\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 66 |\u001b[39m         \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mlocator(\u001b[32m'#logout2'\u001b[39m))\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 67 |\u001b[39m         \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mlocator(\u001b[32m'#nameofuser'\u001b[39m))\u001b[33m.\u001b[39mtoContainText(\u001b[32m'Welcome pavanol'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 68 |\u001b[39m         \u001b[90m// user_Demo_12345 user_Demo_1234\u001b[39m\n \u001b[90m 69 |\u001b[39m     })\u001b[0m\n\u001b[2m    at C:\\Users\\Sayan\\OneDrive\\Documents\\Playwright Demo\\tests\\tricentispageTest.spec.ts:66:48\u001b[22m"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-08-25T19:34:50.981Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Users\\Sayan\\OneDrive\\Documents\\Playwright Demo\\test-results\\tricentispageTest-demowebs-b1bd1-n-test-demoblaze-Login-test-chromium\\test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Users\\Sayan\\OneDrive\\Documents\\Playwright Demo\\test-results\\tricentispageTest-demowebs-b1bd1-n-test-demoblaze-Login-test-chromium\\video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\Sayan\\OneDrive\\Documents\\Playwright Demo\\test-results\\tricentispageTest-demowebs-b1bd1-n-test-demoblaze-Login-test-chromium\\error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "C:\\Users\\Sayan\\OneDrive\\Documents\\Playwright Demo\\test-results\\tricentispageTest-demowebs-b1bd1-n-test-demoblaze-Login-test-chromium\\trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Users\\Sayan\\OneDrive\\Documents\\Playwright Demo\\tests\\tricentispageTest.spec.ts",
+                        "column": 48,
+                        "line": 66
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "6c8bcedddc55156d6412-3ad8686c586a10536437",
+              "file": "tricentispageTest.spec.ts",
+              "line": 60,
+              "column": 5
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-08-25T19:34:39.625Z",
+    "duration": 25485.246,
+    "expected": 4,
+    "skipped": 1,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

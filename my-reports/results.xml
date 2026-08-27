@@ -1,0 +1,82 @@
+<testsuites id="" name="" tests="6" failures="1" skipped="1" errors="0" time="25.485246">
+<testsuite name="tricentispageTest.spec.ts" timestamp="2026-08-25T19:34:39.669Z" hostname="chromium" tests="6" failures="1" skipped="1" time="51.91" errors="0">
+<testcase name="demowebshop Home Page Tests › Homepage logo test" classname="tricentispageTest.spec.ts" time="9.706">
+</testcase>
+<testcase name="demowebshop Home Page Tests › Homepage title test" classname="tricentispageTest.spec.ts" time="9.994">
+</testcase>
+<testcase name="demowebshop User Login test › Login test with in-valid credentials" classname="tricentispageTest.spec.ts" time="8.674">
+<system-out>
+<![CDATA[This test is expected to fail due to invalid credentials
+]]>
+</system-out>
+</testcase>
+<testcase name="demowebshop User Login test › Login test with valid credentials" classname="tricentispageTest.spec.ts" time="10.15">
+</testcase>
+<testcase name="demowebshop User Login test › demowebshop search test" classname="tricentispageTest.spec.ts">
+<properties>
+<property name="skip" value="">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="demowebshop User Login test › demoblaze Login test" classname="tricentispageTest.spec.ts" time="13.386">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|..\test-results\tricentispageTest-demowebs-b1bd1-n-test-demoblaze-Login-test-chromium\test-failed-1.png]]
+
+[[ATTACHMENT|..\test-results\tricentispageTest-demowebs-b1bd1-n-test-demoblaze-Login-test-chromium\video.webm]]
+
+[[ATTACHMENT|..\test-results\tricentispageTest-demowebs-b1bd1-n-test-demoblaze-Login-test-chromium\error-context.md]]
+
+[[ATTACHMENT|..\test-results\tricentispageTest-demowebs-b1bd1-n-test-demoblaze-Login-test-chromium\trace.zip]]
+]]>
+</system-out>
+<failure message="expect(locator).toBeVisible() failed" type="expect.toBeVisible">
+<![CDATA[  [chromium] › tricentispageTest.spec.ts:60:5 › demowebshop User Login test › demoblaze Login test @P1 @Sanity 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator:  locator('#logout2')
+    Expected: visible
+    Received: hidden
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "toBeVisible" with timeout 10000ms
+      - waiting for locator('#logout2')
+        23 × locator resolved to <a href="#" id="logout2" class="nav-link" onclick="logOut()">Log out</a>
+           - unexpected value "hidden"
+
+
+      64 |         await page.fill('#loginpassword','test@123X'); //invalid credentials
+      65 |         await page.getByRole('button', {name:'Log in'}).click();
+    > 66 |         await expect(page.locator('#logout2')).toBeVisible();
+         |                                                ^
+      67 |         await expect(page.locator('#nameofuser')).toContainText('Welcome pavanol');
+      68 |         // user_Demo_12345 user_Demo_1234
+      69 |     })
+        at C:\Users\Sayan\OneDrive\Documents\Playwright Demo\tests\tricentispageTest.spec.ts:66:48
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\test-results\tricentispageTest-demowebs-b1bd1-n-test-demoblaze-Login-test-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\test-results\tricentispageTest-demowebs-b1bd1-n-test-demoblaze-Login-test-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\tricentispageTest-demowebs-b1bd1-n-test-demoblaze-Login-test-chromium\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\test-results\tricentispageTest-demowebs-b1bd1-n-test-demoblaze-Login-test-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\test-results\tricentispageTest-demowebs-b1bd1-n-test-demoblaze-Login-test-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+</testcase>
+</testsuite>
+</testsuites>
