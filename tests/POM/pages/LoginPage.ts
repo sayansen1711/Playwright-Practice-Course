@@ -27,11 +27,11 @@ export class LoginPage {
     // }
     async fillUsername(username: string) {
         await this.usernametext.click();
-        await this.usernametext.fill(username);
+        await this.usernametext.fill(username); //testUser98745
     }
     async fillPassword(password: string) {
         await this.passwordtext.click();
-        await this.passwordtext.fill(password);
+        await this.passwordtext.fill(password); //password
     }
     async submitLoginIn() {
         await this.loginButton.click();
