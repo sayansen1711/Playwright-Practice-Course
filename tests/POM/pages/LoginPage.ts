@@ -26,17 +26,17 @@ export class LoginPage {
     //     await expect(this.loginButton).toBeEnabled();
     // }
     async fillUsername(username: string) {
-        await this.usernametext.click();
+        await this.usernametext.clear();
         await this.usernametext.fill(username); //testUser98745
     }
     async fillPassword(password: string) {
-        await this.passwordtext.click();
+        await this.passwordtext.clear();
         await this.passwordtext.fill(password); //password
     }
     async submitLoginIn() {
         await this.loginButton.click();
     }
-    async logIn(username: string, password: string) {
+    async login(username: string, password: string) {
         await this.fillUsername(username);
         await this.fillPassword(password);
         await this.submitLoginIn();

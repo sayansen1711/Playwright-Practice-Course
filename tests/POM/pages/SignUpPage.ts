@@ -36,7 +36,7 @@ export class SignUpPage {
         await this.fillUsername(username);
         await this.fillPassword(password);
 
-        // await Promise.all([this.page.waitForEvent('popup'), this.clickSignUpButton()]);
+        // await Promise.all([this.page.waitForEvent('dialog'), this.clickSignUpButton()]);
         const dialogPromise = this.page.waitForEvent('dialog');
         await this.submitSignUp();
         const dialog = await dialogPromise;

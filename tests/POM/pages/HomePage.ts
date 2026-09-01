@@ -6,6 +6,7 @@ export class HomePage{
     private readonly addToCartButton: Locator;
     private readonly cartLink: Locator;
     private readonly categoryLink: Locator;
+    private readonly usernametext: Locator;
 
     constructor(page: Page){
         this.page=page;
@@ -13,6 +14,7 @@ export class HomePage{
         this.addToCartButton=this.page.locator('.btn.btn-success.btn-lg');
         this.cartLink=this.page.locator('#cartur');
         this.categoryLink=this.page.locator('.list-group>a#itemc');
+        this.usernametext=this.page.locator('#nameofuser');
     }
 
     async navigateToCart(){
@@ -67,5 +69,8 @@ export class HomePage{
             }
         }
         return false;
+    }
+    async getWelcomeUsername(){
+        return await this.usernametext.textContent();
     }
 }
