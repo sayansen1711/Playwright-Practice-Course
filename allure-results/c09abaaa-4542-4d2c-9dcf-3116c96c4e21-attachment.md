@@ -1,0 +1,133 @@
+# Instructions
+
+- Following Playwright test failed.
+- Explain why, be concise, respect Playwright best practices.
+- Provide a snippet of code with the fix, if possible.
+
+# Test info
+
+- Name: POM\POM_Test.spec.ts >> Demoblaze test: Catalog Navigation >> TC-05: Category Filtering
+- Location: tests\POM\POM_Test.spec.ts:78:5
+
+# Error details
+
+```
+Test timeout of 60000ms exceeded.
+```
+
+```
+Error: locator.click: Test timeout of 60000ms exceeded.
+Call log:
+  - waiting for locator('//a[contains(@onclick, \'phone\')]')
+
+```
+
+# Test source
+
+```ts
+  1   | import { Page, Locator } from '@playwright/test';
+  2   | export class HomePage {
+  3   |     private readonly page: Page;
+  4   |     private readonly productLinks: Locator;
+  5   |     private readonly addToCartButton: Locator;
+  6   |     private readonly cartLink: Locator;
+  7   |     private readonly categoryLink: Locator;
+  8   |     private readonly usernametext: Locator;
+  9   |     private readonly phoneLink: Locator;
+  10  |     private readonly laptopLink: Locator;
+  11  |     private readonly monitorLink: Locator;
+  12  |     private readonly listedItems: Locator;
+  13  | 
+  14  |     constructor(page: Page) {
+  15  |         this.page = page;
+  16  |         this.productLinks = this.page.locator('.card-title>a');
+  17  |         this.addToCartButton = this.page.locator('.btn.btn-success.btn-lg');
+  18  |         this.cartLink = this.page.locator('#cartur');
+  19  |         this.categoryLink = this.page.locator('.list-group>a#itemc');
+  20  |         this.usernametext = this.page.locator('#nameofuser');
+  21  |         this.phoneLink = this.page.locator("//a[contains(@onclick, 'phone')]");
+  22  |         this.laptopLink = this.page.locator("//a[contains(@onclick, 'notebook')]");
+  23  |         this.monitorLink = this.page.locator("//a[contains(@onclick, 'monitor')]");
+  24  |         this.listedItems = this.page.locator('.hrefch');
+  25  |     }
+  26  | 
+  27  |     async navigateToCart() {
+  28  |         await this.cartLink.click();
+  29  |     }
+  30  |     async addToCart() {
+  31  |         await this.addToCartButton.click();
+  32  |     }
+  33  |     async addProductToCart(name: string) {
+  34  |         await this.selectProductByName(name);
+  35  |         // this.page.once('dialog', async dialog=>{
+  36  |         //     if(dialog.message().includes('Product added')){
+  37  |         //         await dialog.accept();
+  38  |         //     }
+  39  |         // })
+  40  |         const dialogPromise = this.page.waitForEvent('dialog'); //capture the dialog box which will be generated after clicking the Add to cart button
+  41  |         await this.addToCartButton.click();
+  42  |         const dialog = await dialogPromise;
+  43  |         if (dialog.message().includes('Product added')) {
+  44  |             await dialog.accept();
+  45  |         }
+  46  |     }
+  47  |     async selectProductByName(name: string) {
+  48  |         const products = await this.productLinks.all();
+  49  | 
+  50  |         for (let i = 0; i < products.length; i++) {
+  51  |             if ((await products[i].innerText()).toLowerCase() === name.toLowerCase()) {
+  52  |                 await products[i].click();
+  53  |                 return; //end of method operation
+  54  |             }
+  55  |         }
+  56  |         throw new Error(`Product ${name} is not found`);
+  57  |     }
+  58  |     async selectCategory(categoryName: string) {
+  59  |         const categories = await this.categoryLink.all();
+  60  | 
+  61  |         for (const category of categories) {
+  62  |             if ((await category.innerText()).toLowerCase() === categoryName.toLowerCase()) {
+  63  |                 await category.click();
+  64  |                 return;
+  65  |             }
+  66  |         }
+  67  |         throw new Error(`Product Category called ${categoryName} is not available`);
+  68  |     }
+  69  | 
+  70  |     async isProductAvailable(productName: string) {
+  71  |         const productElements = await this.productLinks.all();
+  72  |         for (let product of productElements) {
+  73  |             const name = await product.textContent();
+  74  |             if (name?.trim().toLowerCase() === productName.toLowerCase()) {
+  75  |                 return true;
+  76  |             }
+  77  |         }
+  78  |         return false;
+  79  |     }
+  80  |     async getWelcomeUsername() {
+  81  |         return await this.usernametext.textContent();
+  82  |     }
+  83  |     async filterProductsByCategory(category: string) {
+  84  |         if (category.toLowerCase().trim() === 'phones') {
+> 85  |             await this.phoneLink.click();
+      |                                  ^ Error: locator.click: Test timeout of 60000ms exceeded.
+  86  |         }
+  87  |         else if (category.toLowerCase().trim() === 'laptops') {
+  88  |             await this.laptopLink.click();
+  89  |         }
+  90  |         else if (category.toLowerCase().trim() === 'monitors') {
+  91  |             await this.monitorLink.click();
+  92  |         } else {
+  93  |             throw new Error(`Category type: ${category} is not listed`);
+  94  |         }
+  95  |         const actualProductLocators = await this.listedItems.all();
+  96  |         const actualProductNames=[];
+  97  |         for (const items of actualProductLocators) {
+  98  |             const name = await items.textContent();
+  99  |             actualProductNames.push(name);
+  100 |         }
+  101 |         return actualProductNames;
+  102 |     }
+  103 | }
+  104 | 
+```

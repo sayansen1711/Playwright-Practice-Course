@@ -1,0 +1,4 @@
+method starting 9
+Product name: Samsung galaxy s6
+Product name: Nokia lumia 1520
+Product name: Nexus 6
