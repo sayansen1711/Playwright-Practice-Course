@@ -1,0 +1,131 @@
+# Instructions
+
+- Following Playwright test failed.
+- Explain why, be concise, respect Playwright best practices.
+- Provide a snippet of code with the fix, if possible.
+
+# Test info
+
+- Name: POM\POM_Test.spec.ts >> Demoblaze test: Cart Management >> TC-09: Remove Item from Cart
+- Location: tests\POM\POM_Test.spec.ts:140:5
+
+# Error details
+
+```
+Error: Product Nexus 6 was not listed
+```
+
+```
+Error: page.waitForTimeout: Test ended.
+```
+
+# Test source
+
+```ts
+  43  |         const homePage = new HomePage(page);
+  44  |         const cartPage = new CartPage(page);
+  45  | 
+  46  |         await loginPage.navigateToLoginIn();
+  47  |         await loginPage.login(signedUpUser!.username, signedUpUser!.password);
+  48  | 
+  49  |         await page.waitForTimeout(3000);
+  50  | 
+  51  |         expect(await homePage.getWelcomeUsername()).toBe(`Welcome ${signedUpUser!.username}`);
+  52  |     })
+  53  | 
+  54  | 
+  55  |     test('TC-04: Invalid Login', async ({ page }) => {
+  56  |         expect(signedUpUser).toBeDefined();
+  57  |         const loginPage = new LoginPage(page);
+  58  | 
+  59  |         await loginPage.navigateToLoginIn();
+  60  |         //invalid password-> Wrong password
+  61  |         let dialogPromise = page.waitForEvent('dialog');
+  62  |         await loginPage.login(signedUpUser!.username, 'invalid_password');
+  63  |         let alert = dialogPromise;
+  64  |         expect((await alert).message()).toContain('Wrong password');
+  65  |         (await alert).accept();
+  66  | 
+  67  |         //invalid user
+  68  |         dialogPromise = page.waitForEvent('dialog');
+  69  |         await loginPage.login(signedUpUser!.username + 'InvalidToken', signedUpUser!.password);
+  70  |         alert = dialogPromise;
+  71  |         expect((await alert).message()).toContain('User does not exist');
+  72  |         (await alert).accept();
+  73  |     })
+  74  | 
+  75  | })
+  76  | 
+  77  | test.describe('Demoblaze test: Catalog Navigation', async () => {
+  78  | 
+  79  |     test.beforeEach('Launch the Demoblaze website', async ({ page }) => {
+  80  |         await page.goto(baseUrl);
+  81  |     })
+  82  | 
+  83  |     test('TC-05: Category Filtering', async ({ page }) => {
+  84  |         const homePage = new HomePage(page);
+  85  |         //Grid displays only products from the active category.
+  86  |         const commonUtility = new CommonUtility();
+  87  |         const categories = ['phones', 'monitors', 'laptops'];
+  88  |         for (const item of categories) {
+  89  |             const expectedProductList = commonUtility.readData(item);
+  90  |             // console.log('expected:',expectedProductList);
+  91  |             const actualProductList = await homePage.filterProductsByCategory(item);
+  92  |             // console.log('actual:',actualProductList);
+  93  |             expect(expectedProductList).toEqual(actualProductList);
+  94  |         }
+  95  |     })
+  96  | 
+  97  |     test('TC-06: Product Details View', async ({ page }) => {
+  98  |         await page.waitForTimeout(2000);
+  99  |         const homePage = new HomePage(page);
+  100 |         await homePage.selectProductByName(testProduct); //clicking on product
+  101 |         // await page.waitForTimeout(2000);
+  102 |         expect(await homePage.productTitleVisible()).toBe(testProduct);
+  103 |         expect(await homePage.productPriceVisible).toBeTruthy();
+  104 |     })
+  105 | })
+  106 | 
+  107 | test.describe('Demoblaze test: Cart Management', async () => {
+  108 | 
+  109 |     let page: any;
+  110 |     
+  111 |     test.beforeAll('Create a single browser context and page for the entire group', async ({ browser }) => {
+  112 |         const context=await browser.newContext();
+  113 |         page = await context.newPage();
+  114 |     })
+  115 | 
+  116 |     test.afterAll(async()=>{
+  117 |         await page.close();
+  118 |     })
+  119 | 
+  120 |     test('TC-07: Add Item to Cart', async()=>{
+  121 |         await page.goto(baseUrl);
+  122 |         await page.waitForTimeout(2000);
+  123 |         const homePage = new HomePage(page);
+  124 |         const message=await homePage.addProductToCart(testProduct);
+  125 |         expect(message).toBe('Product added');
+  126 |     })
+  127 |     test('TC-08: Cart Total Verification', async()=>{
+  128 |         const homePage = new HomePage(page);
+  129 |         const cartPage = new CartPage(page);
+  130 |         await homePage.navigateToCart();
+  131 |         await page.waitForTimeout(5000); //wait for the cart page to load
+  132 |         expect(await cartPage.isProductInCart(testProduct)).toBeTruthy();
+  133 |         const prices=await cartPage.getProductPrices();
+  134 |         let totalPrice=0;
+  135 |         for(let price of prices){
+  136 |             totalPrice+=price;
+  137 |         }
+  138 |         expect(totalPrice).toEqual(await cartPage.getTotalCartValue());
+  139 |     })
+  140 |     test('TC-09: Remove Item from Cart', async({page})=>{
+  141 |         const cartPage = new CartPage(page);
+  142 |         cartPage.removeProductFromCart(testProduct);
+> 143 |         await page.waitForTimeout(2000); //wait for the cart page to reload
+      |                    ^ Error: page.waitForTimeout: Test ended.
+  144 |         const totalDisplayedPrice=await cartPage.getTotalCartValue();
+  145 |         expect(totalDisplayedPrice).toEqual(0);
+  146 |     })
+  147 | })
+```

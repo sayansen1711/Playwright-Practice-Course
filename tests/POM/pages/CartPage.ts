@@ -22,7 +22,7 @@ export class CartPage {
     async isProductInCart(productName: string) {
         const productList = await this.productNameCells.all();
         for (const product of productList) {
-            if ((await product.textContent())?.trim().toLowerCase() === productName) {
+            if ((await product.textContent())?.trim().toLowerCase() === productName.toLowerCase()) {
                 return true;
             }
         }
@@ -51,12 +51,10 @@ export class CartPage {
     async removeProductFromCart(productName: string){
         const rows=await this.productRows.all();
         const matchingRows=[] as Array<{row: Locator; deleteButton: Locator}>;
-
         for(const row of rows){
-            const nameCell=row.locator('.success>td:nth-child(2)');
-            const name = await nameCell.textContent();
-            if(name?.trim().toLowerCase()===productName){
-                matchingRows.push({row, deleteButton: row.locator('.success>td a')});
+            const name=await row.locator('td:nth-child(2)').textContent();
+            if(name?.trim().toLowerCase()===productName.toLowerCase()){
+                matchingRows.push({row, deleteButton: row.locator('td a')});
             }
         }
         if(matchingRows.length===0){

@@ -33,18 +33,21 @@ export class HomePage {
         await this.addToCartButton.click();
     }
     async addProductToCart(name: string) {
-        await this.selectProductByName(name);
+        await this.selectProductByName(name);  //clicking on the desired product
+        await this.page.waitForTimeout(2000);
         // this.page.once('dialog', async dialog=>{
         //     if(dialog.message().includes('Product added')){
         //         await dialog.accept();
         //     }
         // })
         const dialogPromise = this.page.waitForEvent('dialog'); //capture the dialog box which will be generated after clicking the Add to cart button
-        await this.addToCartButton.click();
+        await this.addToCart();
         const dialog = await dialogPromise;
-        if (dialog.message().includes('Product added')) {
+        const message=dialog.message();
+        if (message.includes('Product added')) {
             await dialog.accept();
         }
+        return message;
     }
     async selectProductByName(name: string) {
         const products = await this.productLinks.all();
