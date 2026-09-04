@@ -14,7 +14,7 @@ test.describe.configure({ mode: 'serial' });
 
 test.describe('Demoblaze test: User Authentication', () => {
 
-    test.beforeEach(async ({ page }) => {
+    test.beforeEach('Launch the Demoblaze website', async ({ page }) => {
         await page.goto(baseUrl);
     })
 
@@ -76,30 +76,73 @@ test.describe('Demoblaze test: User Authentication', () => {
 
 test.describe('Demoblaze test: Catalog Navigation', async () => {
 
-    test.beforeEach(async ({ page }) => {
+    test.beforeEach('Launch the Demoblaze website', async ({ page }) => {
         await page.goto(baseUrl);
     })
 
-    test('TC-05: Category Filtering', async({page})=>{
+    test('TC-05: Category Filtering', async ({ page }) => {
         const homePage = new HomePage(page);
         //Grid displays only products from the active category.
         const commonUtility = new CommonUtility();
-        const categories=['phones', 'monitors', 'laptops'];
-        for(const item of categories){
-            const expectedProductList=commonUtility.readData(item);
+        const categories = ['phones', 'monitors', 'laptops'];
+        for (const item of categories) {
+            const expectedProductList = commonUtility.readData(item);
             // console.log('expected:',expectedProductList);
-            const actualProductList=await homePage.filterProductsByCategory(item);
+            const actualProductList = await homePage.filterProductsByCategory(item);
             // console.log('actual:',actualProductList);
             expect(expectedProductList).toEqual(actualProductList);
         }
     })
 
-    test('TC-06: Product Details View', async({page})=>{
+    test('TC-06: Product Details View', async ({ page }) => {
         await page.waitForTimeout(2000);
         const homePage = new HomePage(page);
         await homePage.selectProductByName(testProduct); //clicking on product
         // await page.waitForTimeout(2000);
         expect(await homePage.productTitleVisible()).toBe(testProduct);
         expect(await homePage.productPriceVisible).toBeTruthy();
+    })
+})
+
+test.describe('Demoblaze test: Cart Management', async () => {
+
+    let page: any;
+    
+    test.beforeAll('Create a single browser context and page for the entire group', async ({ browser }) => {
+        const context=await browser.newContext();
+        page = await context.newPage();
+    })
+
+    test.afterAll(async()=>{
+        await page.close();
+    })
+
+    test('TC-07: Add Item to Cart', async()=>{
+        await page.goto(baseUrl);
+        await page.waitForTimeout(4000);
+        const homePage = new HomePage(page);
+        const message=await homePage.addProductToCart(testProduct);
+        expect(message).toBe('Product added');
+        //TODO: Add more items to cart and verify the subsequent processes
+    })
+    test('TC-08: Cart Total Verification', async()=>{
+        const homePage = new HomePage(page);
+        const cartPage = new CartPage(page);
+        await homePage.navigateToCart();
+        await page.waitForTimeout(5000); //wait for the cart page to load
+        expect(await cartPage.isProductInCart(testProduct)).toBeTruthy();
+        const prices=await cartPage.getProductPrices();
+        let totalPrice=0;
+        for(let price of prices){
+            totalPrice+=price;
+        }
+        expect(totalPrice).toEqual(await cartPage.getTotalCartValue());
+    })
+    test('TC-09: Remove Item from Cart', async()=>{
+        const cartPage = new CartPage(page);
+        cartPage.removeProductFromCart(testProduct);
+        await page.waitForTimeout(2000); //wait for the cart page to reload
+        const totalDisplayedPrice=await cartPage.getTotalCartValue();
+        expect(totalDisplayedPrice).toEqual(0);
     })
 })
