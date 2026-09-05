@@ -7,6 +7,7 @@ import { CartPage } from './pages/CartPage.js';
 import { CommonUtility } from './CommonUtility.js';
 const baseUrl = 'https://demoblaze.com/index.html';
 const testProduct = 'Nexus 6';
+const testProductList = ['Nexus 6', 'Sony vaio i7', 'Samsung galaxy s6', 'HTC One M9'];
 const testPassword = 'password';
 let signedUpUser: { username: string; password: string } | undefined; //object and username would be generated dynamically
 //Sign Up -> Login -> Add product to cart -> Verify the product in Cart page
@@ -107,42 +108,63 @@ test.describe('Demoblaze test: Catalog Navigation', async () => {
 test.describe('Demoblaze test: Cart Management', async () => {
 
     let page: any;
-    
+
     test.beforeAll('Create a single browser context and page for the entire group', async ({ browser }) => {
-        const context=await browser.newContext();
+        const context = await browser.newContext();
         page = await context.newPage();
+        await page.goto(baseUrl);
+        await page.waitForTimeout(4000);
     })
 
-    test.afterAll(async()=>{
+    test.afterAll(async () => {
         await page.close();
     })
 
-    test('TC-07: Add Item to Cart', async()=>{
-        await page.goto(baseUrl);
-        await page.waitForTimeout(4000);
+    test('TC-07: Add Items to Cart', async () => {
         const homePage = new HomePage(page);
-        const message=await homePage.addProductToCart(testProduct);
-        expect(message).toBe('Product added');
-        //TODO: Add more items to cart and verify the subsequent processes
+        for (const item of testProductList) {
+            await test.step(`Add "${item}" to cart`, async () => {
+                const message = await homePage.addProductToCart(item);
+                expect(message, `Failed to add ${item} to the cart`).toBe('Product added');
+                await page.goto(baseUrl);
+                await page.waitForTimeout(3000);
+            }
+            )
+            //TODO: Add more items to cart and verify the subsequent processes
+        }
     })
-    test('TC-08: Cart Total Verification', async()=>{
+
+    test('TC-08: Cart Total Verification', async () => {
         const homePage = new HomePage(page);
         const cartPage = new CartPage(page);
         await homePage.navigateToCart();
         await page.waitForTimeout(5000); //wait for the cart page to load
-        expect(await cartPage.isProductInCart(testProduct)).toBeTruthy();
-        const prices=await cartPage.getProductPrices();
-        let totalPrice=0;
-        for(let price of prices){
-            totalPrice+=price;
+
+        for (const item of testProductList) {
+            expect(await cartPage.isProductInCart(item), `${item} not found in cart`).toBeTruthy();
         }
+        const prices = await cartPage.getProductPrices();
+        const totalPrice = prices.reduce((sum, price) => sum + price, 0);
         expect(totalPrice).toEqual(await cartPage.getTotalCartValue());
     })
-    test('TC-09: Remove Item from Cart', async()=>{
+    test('TC-09: Remove Item from Cart', async () => {
         const cartPage = new CartPage(page);
-        cartPage.removeProductFromCart(testProduct);
-        await page.waitForTimeout(2000); //wait for the cart page to reload
-        const totalDisplayedPrice=await cartPage.getTotalCartValue();
-        expect(totalDisplayedPrice).toEqual(0);
+        let totalBefore: number, removedProductPrice: number;
+
+        await test.step('Capture cart state before removal', async () => {
+            totalBefore = await cartPage.getTotalCartValue();
+            removedProductPrice = await cartPage.getProductPrice(testProduct);
+        });
+
+        await test.step(`Remove "${testProduct}" from cart`, async () => {
+            await cartPage.removeProductFromCart(testProduct);
+            await page.waitForTimeout(5000);
+        });
+
+        await test.step('Verify total decreased correctly', async () => {
+            const totalAfter = await cartPage.getTotalCartValue();
+            expect(totalAfter).toEqual(totalBefore - removedProductPrice);
+            expect(await cartPage.isProductInCart(testProduct)).toBeFalsy();
+        });
     })
 })

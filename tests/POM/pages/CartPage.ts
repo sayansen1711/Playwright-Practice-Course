@@ -48,6 +48,20 @@ export class CartPage {
         return prices;
     }
 
+    async getProductPrice(product: string){
+        let price;
+        const rows=await this.productRows.all();
+        for(const row of rows){
+            const name=await row.locator('td:nth-child(2)').textContent();
+            if(name?.trim().toLowerCase()===product.trim().toLowerCase()){
+                price=await row.locator('td:nth-child(3)').textContent() || '0';
+                return parseFloat(price);
+            }
+        }
+        throw new Error(`Product ${product} is not found`);
+        
+    }
+
     async removeProductFromCart(productName: string){
         const rows=await this.productRows.all();
         const matchingRows=[] as Array<{row: Locator; deleteButton: Locator}>;
