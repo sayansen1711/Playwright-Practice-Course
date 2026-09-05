@@ -9,11 +9,15 @@ const baseUrl = 'https://demoblaze.com/index.html';
 const testProduct = 'Nexus 6';
 const testProductList = ['Nexus 6', 'Sony vaio i7', 'Samsung galaxy s6', 'HTC One M9'];
 const testPassword = 'password';
+const productDataJsonPath='tests/testdata/products.json';
+const formDataJsonPath='tests/testdata/purchase-form-data.json';
 let signedUpUser: { username: string; password: string } | undefined; //object and username would be generated dynamically
 //Sign Up -> Login -> Add product to cart -> Verify the product in Cart page
-test.describe.configure({ mode: 'serial' });
+// test.describe.configure({ mode: 'serial' });
 
-test.describe('Demoblaze test: User Authentication', () => {
+test.describe('Demoblaze Test 1: User Authentication', () => {
+    
+    test.describe.configure({ mode: 'serial' });
 
     test.beforeEach('Launch the Demoblaze website', async ({ page }) => {
         await page.goto(baseUrl);
@@ -75,7 +79,7 @@ test.describe('Demoblaze test: User Authentication', () => {
 
 })
 
-test.describe('Demoblaze test: Catalog Navigation', async () => {
+test.describe('Demoblaze Test 2: Catalog Navigation', async () => {
 
     test.beforeEach('Launch the Demoblaze website', async ({ page }) => {
         await page.goto(baseUrl);
@@ -84,7 +88,7 @@ test.describe('Demoblaze test: Catalog Navigation', async () => {
     test('TC-05: Category Filtering', async ({ page }) => {
         const homePage = new HomePage(page);
         //Grid displays only products from the active category.
-        const commonUtility = new CommonUtility();
+        const commonUtility = new CommonUtility(productDataJsonPath);
         const categories = ['phones', 'monitors', 'laptops'];
         for (const item of categories) {
             const expectedProductList = commonUtility.readData(item);
@@ -105,7 +109,9 @@ test.describe('Demoblaze test: Catalog Navigation', async () => {
     })
 })
 
-test.describe('Demoblaze test: Cart Management', async () => {
+test.describe('Demoblaze Test 3: Cart Management', async () => {
+
+    test.describe.configure({ mode: 'serial' });
 
     let page: any;
 
@@ -128,9 +134,7 @@ test.describe('Demoblaze test: Cart Management', async () => {
                 expect(message, `Failed to add ${item} to the cart`).toBe('Product added');
                 await page.goto(baseUrl);
                 await page.waitForTimeout(3000);
-            }
-            )
-            //TODO: Add more items to cart and verify the subsequent processes
+            })
         }
     })
 
@@ -166,5 +170,65 @@ test.describe('Demoblaze test: Cart Management', async () => {
             expect(totalAfter).toEqual(totalBefore - removedProductPrice);
             expect(await cartPage.isProductInCart(testProduct)).toBeFalsy();
         });
+    })
+})
+
+test.describe('Demoblaze Test 4: Checkout Process', async()=>{
+
+    let page: any;
+
+    test.beforeEach('Launch the Demoblaze website', async ({ page }) => {
+        await page.goto(baseUrl);
+        await page.waitForTimeout(4000);
+    })
+
+    test('TC-10: Complete Purchase', async({page})=>{
+        //add products to cart
+        const homePage = new HomePage(page);
+        const cartPage = new CartPage(page);
+        const commonUtility = new CommonUtility(formDataJsonPath);
+        for (const item of testProductList) {
+            await test.step(`Add "${item}" to cart`, async () => {
+                const message = await homePage.addProductToCart(item);
+                expect(message, `Failed to add ${item} to the cart`).toBe('Product added');
+                await page.goto(baseUrl);
+                await page.waitForTimeout(3000);
+            })
+        }
+        await homePage.navigateToCart(); //navigate to cart page to place order
+        await page.waitForTimeout(5000); //wait for the cart page to load
+        await cartPage.proceedToCheckout();  //click on place order btn
+        for(const {name, country, city, creditcard} of commonUtility.jsonData){
+            await cartPage.fillFormDetails(name, country, city, creditcard);
+        }
+        await cartPage.clickPurchaseBtn();
+        await page.waitForTimeout(2000);
+        const confirmationMsg=(await cartPage.getPurchaseConfirmMessage())?.trim();
+        expect(confirmationMsg).toEqual('Thank you for your purchase!');
+    })
+    
+    test('TC-11: Missing Required Fields', async({page})=>{
+        //add products to cart
+        const homePage = new HomePage(page);
+        const cartPage = new CartPage(page);
+        for (const item of testProductList) {
+            await test.step(`Add "${item}" to cart`, async () => {
+                const message = await homePage.addProductToCart(item);
+                expect(message, `Failed to add ${item} to the cart`).toBe('Product added');
+                await page.goto(baseUrl);
+                await page.waitForTimeout(3000);
+            })
+        }
+        await homePage.navigateToCart(); //navigate to cart page to place order
+        await page.waitForTimeout(5000); //wait for the cart page to load
+        await cartPage.proceedToCheckout();  //click on place order btn
+        
+        let popupMsg='';
+        page.once('dialog', async(dialog)=>{
+            popupMsg=dialog.message();
+            await dialog.accept();
+        });
+        await cartPage.clickPurchaseBtn(); 
+        expect(popupMsg).toEqual('Please fill out Name and Creditcard.');
     })
 })
