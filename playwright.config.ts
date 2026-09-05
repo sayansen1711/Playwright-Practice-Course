@@ -34,13 +34,13 @@ export default defineConfig({
     // ['json', {outputFile: 'my-reports/results.json'}], //JSON report
     // ['junit', {outputFile: 'my-reports/results.xml'}], //Junit xml report
     // ['./utility/CustomReporter.ts', {customOption: 'some value'}],
-    ['allure-playwright',
-      {
-        resultsDir: 'allure-results', // Target folder for raw data
-        detail: true, // Captures steps, hooks, and assertions
-        suiteTitle: true // Uses file names as suite groups
-      }
-    ]
+    // ['allure-playwright',
+    //   {
+    //     resultsDir: 'allure-results', // Target folder for raw data
+    //     detail: true, // Captures steps, hooks, and assertions
+    //     suiteTitle: true // Uses file names as suite groups
+    //   }
+    // ]
   ],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
@@ -48,11 +48,17 @@ export default defineConfig({
     // baseURL: 'http://localhost:3000',
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
+    // All page navigations across the project will timeout after 20 seconds
+    navigationTimeout: 20000, 
+    
+    // Optional: Sets timeout for actions like click, type, hover (separate from page load)
+    actionTimeout: 10000, 
     trace: 'retain-on-failure',
-    viewport: { width: 1280, height: 720 },
     launchOptions: {
       args:['--start-maximized']
     },
+    // viewport: null,
+    // deviceScaleFactor: undefined,
     screenshot: 'only-on-failure',
     video: 'retain-on-failure'
   },
@@ -61,7 +67,10 @@ export default defineConfig({
   projects: [
     {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      use: { ...devices['Desktop Chrome'],
+        viewport: null,
+        deviceScaleFactor: undefined,
+       },
     },
 
     // {

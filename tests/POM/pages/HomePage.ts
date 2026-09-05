@@ -35,11 +35,6 @@ export class HomePage {
     async addProductToCart(name: string) {
         await this.selectProductByName(name);  //clicking on the desired product
         await this.page.waitForTimeout(2000);
-        // this.page.once('dialog', async dialog=>{
-        //     if(dialog.message().includes('Product added')){
-        //         await dialog.accept();
-        //     }
-        // })
         const dialogPromise = this.page.waitForEvent('dialog'); //capture the dialog box which will be generated after clicking the Add to cart button
         await this.addToCart();
         const dialog = await dialogPromise;
@@ -52,7 +47,7 @@ export class HomePage {
     async selectProductByName(name: string) {
         const products = await this.productLinks.all();
         for (let i = 0; i < products.length; i++) {
-            if ((await products[i].textContent())?.toLowerCase() === name.toLowerCase()) {
+            if ((await products[i].textContent())?.trim().toLowerCase() === name.trim().toLowerCase()) {
                 await products[i].click();
                 return;
             }

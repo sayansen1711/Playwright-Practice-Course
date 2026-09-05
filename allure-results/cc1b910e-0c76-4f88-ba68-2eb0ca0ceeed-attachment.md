@@ -1,0 +1,140 @@
+# Instructions
+
+- Following Playwright test failed.
+- Explain why, be concise, respect Playwright best practices.
+- Provide a snippet of code with the fix, if possible.
+
+# Test info
+
+- Name: POM\POM_Test.spec.ts >> Demoblaze test: Cart Management >> TC-07: Add Item Sony vaio i7 to Cart
+- Location: tests\POM\POM_Test.spec.ts:123:9
+
+# Error details
+
+```
+Error: Product Sony vaio i7 is not found
+```
+
+# Test source
+
+```ts
+  1   | import { Page, Locator } from '@playwright/test';
+  2   | export class HomePage {
+  3   |     private readonly page: Page;
+  4   |     private readonly productLinks: Locator;
+  5   |     private readonly addToCartButton: Locator;
+  6   |     private readonly cartLink: Locator;
+  7   |     private readonly categoryLink: Locator;
+  8   |     private readonly usernametext: Locator;
+  9   |     private readonly phoneLink: Locator;
+  10  |     private readonly laptopLink: Locator;
+  11  |     private readonly monitorLink: Locator;
+  12  |     private readonly productTitle: Locator;
+  13  |     private readonly productPrice: Locator;
+  14  | 
+  15  |     constructor(page: Page) {
+  16  |         this.page = page;
+  17  |         this.productLinks = this.page.locator('.card-title>a');
+  18  |         this.addToCartButton = this.page.locator('.btn.btn-success.btn-lg');
+  19  |         this.cartLink = this.page.locator('#cartur');
+  20  |         this.categoryLink = this.page.locator('.list-group>a#itemc');
+  21  |         this.usernametext = this.page.locator('#nameofuser');
+  22  |         this.phoneLink = this.page.locator("//a[contains(@onclick, 'phone')]");
+  23  |         this.laptopLink = this.page.locator("//a[contains(@onclick, 'notebook')]");
+  24  |         this.monitorLink = this.page.locator("//a[contains(@onclick, 'monitor')]");
+  25  |         this.productTitle=this.page.locator('h2.name');
+  26  |         this.productPrice=this.page.locator('h3.price-container');
+  27  |     }
+  28  | 
+  29  |     async navigateToCart() {
+  30  |         await this.cartLink.click();
+  31  |     }
+  32  |     async addToCart() {
+  33  |         await this.addToCartButton.click();
+  34  |     }
+  35  |     async addProductToCart(name: string) {
+  36  |         await this.selectProductByName(name);  //clicking on the desired product
+  37  |         await this.page.waitForTimeout(2000);
+  38  |         // this.page.once('dialog', async dialog=>{
+  39  |         //     if(dialog.message().includes('Product added')){
+  40  |         //         await dialog.accept();
+  41  |         //     }
+  42  |         // })
+  43  |         const dialogPromise = this.page.waitForEvent('dialog'); //capture the dialog box which will be generated after clicking the Add to cart button
+  44  |         await this.addToCart();
+  45  |         const dialog = await dialogPromise;
+  46  |         const message=dialog.message();
+  47  |         if (message.includes('Product added')) {
+  48  |             await dialog.accept();
+  49  |         }
+  50  |         return message;
+  51  |     }
+  52  |     async selectProductByName(name: string) {
+  53  |         const products = await this.productLinks.all();
+  54  |         for (let i = 0; i < products.length; i++) {
+  55  |             if ((await products[i].textContent())?.toLowerCase() === name.toLowerCase()) {
+  56  |                 await products[i].click();
+  57  |                 return;
+  58  |             }
+  59  |         }
+> 60  |         throw new Error(`Product ${name} is not found`);
+      |               ^ Error: Product Sony vaio i7 is not found
+  61  |     }
+  62  |     async selectCategory(categoryName: string) {
+  63  |         const categories = await this.categoryLink.all();
+  64  | 
+  65  |         for (const category of categories) {
+  66  |             if ((await category.innerText()).toLowerCase() === categoryName.toLowerCase()) {
+  67  |                 await category.click();
+  68  |                 return;
+  69  |             }
+  70  |         }
+  71  |         throw new Error(`Product Category called ${categoryName} is not available`);
+  72  |     }
+  73  | 
+  74  |     async isProductAvailable(productName: string) {
+  75  |         const productElements = await this.productLinks.all();
+  76  |         for (let product of productElements) {
+  77  |             const name = await product.textContent();
+  78  |             if (name?.trim().toLowerCase() === productName.toLowerCase()) {
+  79  |                 return true;
+  80  |             }
+  81  |         }
+  82  |         return false;
+  83  |     }
+  84  |     async getWelcomeUsername() {
+  85  |         return await this.usernametext.textContent();
+  86  |     }
+  87  |     async filterProductsByCategory(category: string) {
+  88  |         // console.log('Starting of method');
+  89  |         if (category.toLowerCase().trim() === 'phones') {
+  90  |             // console.log('Clicking on phone link');
+  91  |             await this.phoneLink.click();
+  92  |             
+  93  |         }
+  94  |         else if (category.toLowerCase().trim() === 'laptops') {
+  95  |             await this.laptopLink.click();
+  96  |         }
+  97  |         else if (category.toLowerCase().trim() === 'monitors') {
+  98  |             await this.monitorLink.click();
+  99  |         } else {
+  100 |             throw new Error(`Category type: ${category} is not listed`);
+  101 |         }
+  102 |         await this.page.waitForTimeout(2000);
+  103 |         const actualProductLocators = await this.productLinks.all();
+  104 |         const actualProductNames=[];
+  105 |         for (const items of actualProductLocators) {
+  106 |             const name = (await items.textContent())?.trim();
+  107 |             actualProductNames.push(name);
+  108 |         }
+  109 |         return actualProductNames;
+  110 |     }
+  111 |     async productTitleVisible(){
+  112 |         return await this.productTitle.textContent();
+  113 |     }
+  114 |     async productPriceVisible(){
+  115 |         return await this.productPrice.isVisible();
+  116 |     }
+  117 | }
+  118 | 
+```
