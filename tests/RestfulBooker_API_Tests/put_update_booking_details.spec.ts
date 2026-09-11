@@ -102,7 +102,23 @@ test('Update booking - Create, Get, Partially update and Update a booking record
         expect(putResponse.statusText()).toBe('OK');
 
         const updatedBookingDetails=await putResponse.json();
-        console.log(`After fully updating booking id ${bookingId}, the response is:\n`,updatedBookingDetails);
-        
+        console.log(`After fully updating booking id ${bookingId}, the response is:\n`,updatedBookingDetails);  
+    });
+
+    await test.step('Step 4: DELETE a booking request using ID', async()=>{
+        const deleteRequest=await request.delete(`${BASE_URL}/booking/${bookingId}`,
+            {
+                headers: {
+                    "Content-Type": "application/json",
+                    "Cookie": `token=${authToken}`
+                }
+            }
+        );
+        expect(deleteRequest.status()).toBe(201);
+        expect(deleteRequest.statusText()).toBe('Created');
+        const getRequest= await request.get(`${BASE_URL}/booking/${bookingId}`);
+        expect(getRequest.status()).toBe(404);
+        expect(getRequest.statusText()).toBe('Not Found');
+        console.log(`After deleting ${bookingId}, the GET request returns Null`);
     })
 })
