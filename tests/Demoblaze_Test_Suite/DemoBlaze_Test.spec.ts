@@ -151,6 +151,7 @@ test.describe('Demoblaze Test 3: Cart Management', async () => {
         const totalPrice = prices.reduce((sum, price) => sum + price, 0);
         expect(totalPrice).toEqual(await cartPage.getTotalCartValue());
     })
+    
     test('TC-09: Remove Item from Cart', async () => {
         const cartPage = new CartPage(page);
         let totalBefore: number, removedProductPrice: number;
