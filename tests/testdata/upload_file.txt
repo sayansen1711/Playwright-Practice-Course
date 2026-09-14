@@ -1,0 +1,1 @@
+Hi, this file would be uploaded using API of Platzi Fake Store.
