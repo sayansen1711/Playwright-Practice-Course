@@ -108,4 +108,70 @@ test.describe('GreenKart Home Page Tests', async () => {
         quantity = await homePage_Locator.getCardQuantity(card);
         expect(quantity, `The product quantity for ${productName} is less than 1`).not.toBeLessThan(1);
     })
+
+    test('TC-05: Add a single product and verify the cart summary', { tag: ['@smoke', '@positive'] }, async ({ page }) => {
+        await homePage_Locator.waitForCatalogueToLoad(prodCount); //page loading check
+        await homePage_Locator.checkCartDetails(0, 0);
+        const productName = 'Brocolli - 1 Kg';
+        const card = await homePage_Locator.returnCard(productName);
+        let i = 1;
+        for (; i <= 2; i++) {
+            await homePage_Locator.clickStepperUpBtn(card);
+        }
+        await homePage_Locator.clickAddToCartBtn(card);
+        const price = await homePage_Locator.returnPrice(card);
+        await homePage_Locator.checkCartDetails(1, price * i);
+    })
+
+    test('TC-06: Add multiple products and verify the aggregated total', { tag: ['@functional', '@positive'] }, async ({ page }) => {
+        await homePage_Locator.waitForCatalogueToLoad(prodCount); //page loading check
+        await homePage_Locator.checkCartDetails(0, 0);
+        const productNames = ['Brocolli - 1 Kg', 'Cauliflower - 1 Kg', 'Cucumber - 1 Kg'];
+        let totalPrice = 0;
+        for (let product of productNames) {
+            const card = await homePage_Locator.returnCard(product);
+            await homePage_Locator.clickAddToCartBtn(card);
+            totalPrice = totalPrice + (await homePage_Locator.returnPrice(card));
+        }
+        await homePage_Locator.checkCartDetails(productNames.length, totalPrice); //assertion of sum of total prices and product count
+        await homePage_Locator.openCartList();
+        expect(await homePage_Locator.returnCartItemNames(), 'The cart does not contain the expected items').toEqual(productNames); //assertion of product names in the cart list
+        const quantities = await homePage_Locator.returnProdQuanties();
+        for (let quantity of quantities) {
+            expect(quantity).toBe("1 No."); //assertion for quantity check in the cart
+        }
+        await expect(homePage_Locator.returnProceedToCheckoutBtn(), 'Proceed to Checkout button is not present in the UI').toBeVisible(); //assertion for Proceed to Checkout Btn visibility
+    })
+
+    test('TC-07: Remove a product from cart preview', { tag: ['@functional', '@positive'] }, async ({ page }) => {
+        await homePage_Locator.waitForCatalogueToLoad(prodCount); //page loading check
+        await homePage_Locator.checkCartDetails(0, 0);
+        const productNames = ['Brocolli - 1 Kg', 'Cauliflower - 1 Kg', 'Cucumber - 1 Kg'];
+        let totalPrice = 0;
+        for (let product of productNames) {
+            const card = await homePage_Locator.returnCard(product);
+            await homePage_Locator.clickAddToCartBtn(card);
+            totalPrice = totalPrice + (await homePage_Locator.returnPrice(card));
+        }
+
+        await homePage_Locator.checkCartDetails(productNames.length, totalPrice);
+        await homePage_Locator.openCartList();
+        await homePage_Locator.removeCartItem('Brocolli - 1 Kg');
+        expect(await homePage_Locator.returnCartItemNames()).not.toContain('Brocolli 1 Kg');
+        totalPrice = totalPrice - (await homePage_Locator.returnPrice(await homePage_Locator.returnCard('Brocolli - 1 Kg')));
+        await homePage_Locator.checkCartDetails(productNames.length - 1, totalPrice);
+    })
+
+    test('TC-08: Apply a valid promo code at checkout', async ({ page }) => {
+        await homePage_Locator.waitForCatalogueToLoad(prodCount); //page loading check
+        await homePage_Locator.checkCartDetails(0, 0);
+        const productNames = ['Brocolli - 1 Kg', 'Cauliflower - 1 Kg', 'Cucumber - 1 Kg'];
+        let totalPrice = 0;
+        for (let product of productNames) {
+            const card = await homePage_Locator.returnCard(product);
+            await homePage_Locator.clickAddToCartBtn(card);
+            totalPrice = totalPrice + (await homePage_Locator.returnPrice(card));
+        }
+        await homePage_Locator.checkCartDetails(productNames.length, totalPrice);
+    })
 })
