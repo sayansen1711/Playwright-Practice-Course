@@ -1,6 +1,6 @@
 import { expect, Locator, Page } from '@playwright/test';
 
-export class HomePage_Locator {
+export class HomePage {
     private readonly page: Page;
     private readonly prodItem: Locator;
     private readonly pageLogo: Locator;
@@ -29,15 +29,15 @@ export class HomePage_Locator {
         await expect(this.prodItem).toHaveCount(expectedCount);
     }
 
-    async returnProdCount() {
+    async getProdCount() {
         return (await this.prodItem.all()).length;
     }
 
-    async returnPageLogo() {
+    async getPageLogo() {
         return (await this.pageLogo.textContent() ?? '').trim();
     }
 
-    async returnProdCards(): Promise<Locator[]> {
+    async getProdCards(): Promise<Locator[]> {
         return this.prodItem.all();
     }
 
@@ -88,7 +88,7 @@ export class HomePage_Locator {
         await this.searchBoxInput.clear();
     }
 
-    async returnNoResultFoundTexts(): Promise<string[]> {
+    async getNoResultFoundTexts(): Promise<string[]> {
         return [await this.noResultHeaderText.textContent() ?? '', await this.noResultLineText.textContent() ?? ''];
     }
 
@@ -96,7 +96,7 @@ export class HomePage_Locator {
         return this.addToCartBtn.all();
     }
 
-    async returnCard(name: string): Promise<Locator> {
+    async getCard(name: string): Promise<Locator> {
         return this.prodItem.filter({ hasText: name });
     }
 
@@ -117,7 +117,7 @@ export class HomePage_Locator {
         await card.locator('.product-action>button').click();
     }
 
-    async returnPrice(card: Locator): Promise<number> {
+    async getPrice(card: Locator): Promise<number> {
         const price = await card.locator('.product-price').textContent() ?? '0';
         return parseFloat(price);
     }
@@ -140,7 +140,7 @@ export class HomePage_Locator {
         await expect(this.itemLists).toHaveCount(countBefore - 1);
     }
 
-    async returnCartItemNames(): Promise<string[]> {
+    async getCartItemNames(): Promise<string[]> {
         const items = await this.itemLists.all();
         const itemNames = [];
         for (let item of items) {
@@ -150,7 +150,7 @@ export class HomePage_Locator {
         return itemNames;
     }
 
-    async returnProdQuanties(): Promise<string[]> {
+    async getProdQuanties(): Promise<string[]> {
         const items = await this.itemLists.all();
         const quantities = [];
         for (let item of items) {
@@ -160,7 +160,7 @@ export class HomePage_Locator {
         return quantities;
     }
 
-    returnProceedToCheckoutBtn():Locator{
+    getProceedToCheckoutBtn():Locator{
         return this.page.getByRole("button", { name: 'PROCEED TO CHECKOUT' });
     }
 }
